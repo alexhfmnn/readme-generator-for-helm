@@ -14,7 +14,12 @@ COPY . /app
 WORKDIR /app
 RUN npm install
 RUN ln -s /app/bin/index.js /app/bin/readme-generator
+RUN groupadd -g 10001 npm && \
+    useradd -d /app -s /bin/bash -u 10000 -g npm npm && \
+    chown -R npm:npm /app
+
+USER npm
 
 ENV PATH="/app/bin:$PATH"
 
-CMD ["readme-generator"]
+ENTRYPOINT ["readme-generator"]
